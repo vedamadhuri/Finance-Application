@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Payment Details</title>
+    <div th:replace="fragments/header::header"/>
+</head>
+<style>
+        table#t01 th{
+            background-color: #778899;
+            color : white;
+        text-align:center;
+        }
+        table#t01 td
+        {
+         text-align:center;
+         }
+    .fluid-container{
+    padding:20px;}
+    </style>
+<script>
+    function calculation(id,count,ActualAmount,balanceAmount,amountPaid)
+    {
+    var amount=prompt("Please enter the amount to be paid");
+    if(isNaN(amount)||(amount==" ")||(amount=="")||(amount==null))
+    {
+    alert("Please Enter Only Numbers");
+    }else {
+      if(amount<balanceAmount)
+	    {
+             window.location.href='/submitAmountDetails/'+ActualAmount+'/'+id+'/'+count+'/'+amount+'/'+balanceAmount;
+        }else
+        {
+        alert("Please Enter Only Numbers");
+        }
+      }
+      }
+</script>
+<body>
+<div th:replace="fragments/navbar::navbar"/>
+<div></div>
+<div></div>
+<h3 align="center" class="mt-3">User Payment Details</h3>
+
+<div> <h4 style = "color:olive;text-align:center;">Username :<span style="color:grey" th:text="${userName}"></span></h4></div>
+<div><h4 style="color:teal;text-align:center;">Groupname :<span style="color:grey " th:text="${groupName}"></span></h4></div>
+<span >&nbsp&nbsp<a href="/userPage" class="btn btn-info" role="button"><i class="fas fa-backspace" title="Back"></i></a>&nbsp</span>
+<div class="fluid-container">
+    <table align="center" class="table table-striped table-bordered text-center" id="t01">
+        <thead>
+        <tr>
+            <th>Month</th>
+            <th>Amount</th>
+            <th>Amount Paid</th>
+            <th>Balance Amount</th>
+            <th>Edit Amount</th>
+            <th>Transaction History</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="payments:${payments}">
+            <td th:text="${paymentsStat.count}"></td>
+           <!-- <td th:text="${#numbers.formatDecimal(payments.amount,1,2)}"></td>-->
+            <td th:text="${payments.amount}"></td>
+            <td th:text="${payments.amountPaid}"></td>
+            <!--<td th:text="${#numbers.formatDecimal(payments.balanceAmount,1,2)}"></td>-->
+            <td th:text="${payments.balanceAmount}"></td>
+            <td align="center" th:attr="amt=${payments.amount},paidAmt=${payments.amountPaid}" th:onclick ="' calculation(\''+${payments.paymentsId}+'\',\''+${paymentsStat.count}+'\',\''+${payments.amount}+'\',\''+${payments.balanceAmount}+'\',\''+${payments.amountPaid}+'\');'"
+                class="btn btn-info">
+                <i align="center" class='fab fa-amazon-pay' style='font-size:20px' ></i></i></td>
+            <td><button class="btn btn-info"  th:disabled="${#lists.size(payments.transactionHistoryList)==0 ? true:false}">
+                <a align="center" th:if="${#lists.size(payments.transactionHistoryList)!=0 ? true:false}" th:href="@{/transactionHistory/{paymentsId}/{amountPaid}(paymentsId=${payments.paymentsId},amountPaid=${payments.amountPaid})}" >
+                <i class="fa fa-history" aria-hidden="true" style="color:black;font-size:20px"></i></a>
+                <i th:if="${#lists.size(payments.transactionHistoryList)==0 ? true:false}" class="fa fa-history" aria-hidden="true" style="color:black;font-size:20px"></i></button></td>
+        </tr>
+        <div  align="center" style="color:red" th:text="${msg}"></div>
+        </tbody>
+    </table>
+</div>
+<div th:replace="fragments/footer::footer"/>
+</body>
+</html>

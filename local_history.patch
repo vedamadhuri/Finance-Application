@@ -1,0 +1,94 @@
+Index: src/main/java/com/application/service/FinanceApplicationService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/application/service/FinanceApplicationService.java	(date 1557403155285)
++++ src/main/java/com/application/service/FinanceApplicationService.java	(date 1557403155285)
+@@ -30,7 +30,7 @@
+ 
+     String getUsersDetails(Model model,String viewName);
+ 
+-    String getGroupsDetails(Model model,String viewName);
++    String getGroupsDetails(GroupDto groupDto,Model model,String viewName);
+ 
+     String updateUser(UserDto userDto,Model model,String viewName);
+ 
+Index: src/main/java/com/application/service/FinanceApplicationServiceImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/application/service/FinanceApplicationServiceImpl.java	(date 1557403226131)
++++ src/main/java/com/application/service/FinanceApplicationServiceImpl.java	(date 1557403226131)
+@@ -104,7 +104,7 @@
+         BeanUtils.copyProperties(groupDto, groupnew);
+         groupnew.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+         applicationDaoImpl.addGroup(groupnew);
+-        return getGroupsDetails(model, viewName);
++        return getGroupsDetails(groupDto,model, viewName);
+ 
+     }
+ 
+@@ -129,8 +129,9 @@
+     }
+ 
+     public String deleteGroupAndUser(String groupName, Model model, String viewName) {
++        GroupDto groupDto=new GroupDto();
+         applicationDaoImpl.deleteGroupAndUser(groupName);
+-        return getGroupsDetails(model, viewName);
++        return getGroupsDetails(groupDto,model, viewName);
+ 
+     }
+ 
+@@ -140,7 +141,8 @@
+         return viewName;
+     }
+ 
+-    public String getGroupsDetails(GroupDto groupDto,Model model, String viewName) {
++    public String getGroupsDetails(Model model, String viewName) {
++        Group
+         Group group = new Group();
+         BeanUtils.copyProperties(groupDto, group);
+         applicationDaoImpl.updateGroup(group);
+@@ -160,7 +162,7 @@
+         Group group = new Group();
+         BeanUtils.copyProperties(groupDto, group);
+         applicationDaoImpl.updateGroup(group);
+-        return getGroupsDetails(model, viewName);
++        return getGroupsDetails(groupDto,model, viewName);
+     }
+ 
+     public String getUser(long userId, Model model, String viewName) {
+Index: src/main/java/com/application/controller/FinanceApplicationController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/application/controller/FinanceApplicationController.java	(date 1557398041934)
++++ src/main/java/com/application/controller/FinanceApplicationController.java	(date 1557398041934)
+@@ -39,13 +39,14 @@
+      */
+     @PostMapping(value = "/authenticate-user")
+     public String authenticateUser(AdminDto admindto, Model model) {
++        GroupDto groupDto=new GroupDto();
+         if ((admindto.getAdministrator() == "") || (admindto.getPassword() == "")) {
+             model.addAttribute("message", "Please enter both username and password");
+             return "login";
+ 
+         }
+         if (financeApplicationServiceImpl.isUserAuthenticated(admindto)) {
+-            return financeApplicationServiceImpl.getGroupsDetails(model, "group");
++            return financeApplicationServiceImpl.getGroupsDetails(groupDto,model, "group");
+         } else {
+             model.addAttribute("message", "Invalid username or password");
+             return "login";
+@@ -57,7 +58,7 @@
+      */
+     @GetMapping(value = "/home")
+     public String loginMenu(Model model) {
+-        return financeApplicationServiceImpl.getGroupsDetails(model, "group");
++        return financeApplicationServiceImpl.getGroupsDetails(groupDto,model, "group");
+     }
+ 
+ 

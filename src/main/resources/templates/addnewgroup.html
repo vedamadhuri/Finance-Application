@@ -1,0 +1,118 @@
+<!DOCTYPE>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+    <title>Edit Group</title>
+    <div th:replace="fragments/header::header"/>
+    <script>
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+        history.go(1);
+    };
+    function valid()
+    {
+    var istrue=true;
+    var groupname=document.myform.groupName.value;
+    var locate=document.myform.location.value;
+    var grprex=/[a-zA-Z0-9]+$/;
+    var locrex=/^[a-zA-Z]+$/;
+    if(!locate.match(locrex))
+    {
+    istrue=false;
+    document.getElementById("spanid1").innerHTML="*Invalid Characters!.Location Should be ALPHABETS only! *";
+    }
+    if(groupname==" ")
+   {
+    istrue=false;
+    document.getElementById("spanid").innerHTML="*Space is not allowed!*";
+    }
+    if(groupname.length>20)
+    {
+    istrue=false;
+    document.getElementById("spanid").innerHTML="*Group Name is too Long!..Please Enter Below 20 characters!*";
+    }
+    if(!groupname.match(grprex))
+    {
+    istrue=false;
+    document.getElementById("spanid").innerHTML="*Only AlphaNumeric Values should Be Entered!!*";
+    }
+    return istrue;
+    }
+
+    </script>
+<style>
+.container{
+    height: 100%;
+    align-content: center;
+    }
+    .card{
+    margin-top:auto;
+    margin-bottom: auto;
+    }
+
+    .card-header h2{
+    color: black;
+    }
+     .input-group-text:after {
+  content:"*";
+  color:red;
+}
+
+</style>
+</head>
+<body>
+<div th:replace="fragments/navbar::navbar"/>
+<div id="form">
+    <form action="/updateGroupDetails" th:object="${groupedit}" name="myform" onsubmit="return valid();" method="post">
+        <div class="container">
+            <div class="d-flex justify-content-center h-100">
+                <div class="card mt-5">
+                    <div class="card-header text-center">
+                        <h2>Edit Group</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspName&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+                            </div>
+                            <input type="text" name="groupName" th:field="*{groupName}" th:value="${groupedit.groupName}"class="form-control" pattern="[a-zA-Z][a-zA-Z0-9]{2,20}" title="Enter Alphabets only" readonly><span style="color:#ffcccc" id="spanid"></span><br>
+                        </div>
+                        <input type="hidden" th:field="*{groupId}" th:value="${groupedit.groupId}" class="form-control">
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspLocation&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+                            </div>
+                            <input type="text" name="location" th:field="*{location}" th:value="${groupedit.location}"class="form-control" pattern="[a-zA-Z]{2,10}" readonly><br>
+                        </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspAmount&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+                            </div>
+                            <input type="number" name="groupAmount" class="form-control" th:field="*{groupAmount}" th:value="${groupedit.groupAmount}" min="1" step="any"><br>
+                        </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">&nbsp&nbsp&nbsp&nbspNo. Of Months&nbsp&nbsp&nbsp&nbsp</span>
+                            </div>
+                            <input type="number" name="monthsDuration" class="form-control" th:field="*{monthsDuration}" th:value="${groupedit.monthsDuration}"  min="1" title="Enter numbers only" required autocomplete="off"><br>
+                        </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspNo. Of Users&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+                            </div>
+                            <input type="number" name="groupSize" class="form-control" th:field="*{groupSize}" th:value="${groupedit.groupSize}" min="1" readonly><br>
+                        </div>
+                        <div class="text-center">
+                            <div align = "center" ><a href="/groupPage" class="btn btn-info" role="button">Cancel</a>&nbsp
+                                <span> <input type="submit" value="Submit" class="btn btn-dark"></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div th:replace="fragments/footer::footer"/>
+</body>
+</html>
+

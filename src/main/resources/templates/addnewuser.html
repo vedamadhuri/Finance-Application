@@ -1,0 +1,177 @@
+
+<!DOCTYPE>
+<html xmlns:th="https://thymeleaf.org">
+<head lang="en">
+    <title>Edit User</title>
+    <div th:replace="fragments/header::header"/>
+    <script>
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+        history.go(1);
+    };
+    function valid()
+    {
+    var istrue=true;
+    var groupname=document.myform.groupname.value;
+    var username=document.myform.username.value;
+    var amt=document.myform.amountPaid.value;
+    if(groupname==" ")
+    {
+    istrue=false;
+    &lt;!&ndash;alert("Space is not allowed!");&ndash;&gt;
+    document.getElementById("spanid1").innerHTML="*Space is not allowed!*";
+    }
+    if(groupname.length>20)
+    {
+    istrue=false;
+    &lt;!&ndash;alert("Group Name is too Long!..PLease Enter Below 7 characters!");&ndash;&gt;
+    document.getElementById("spanid1").innerHTML="*Group Name is too Long!..PLease Enter Below 20 characters!*";
+    }
+    if(username==" ")
+   {
+    istrue=false;
+    &lt;!&ndash;alert("Space is not allowed!");&ndash;&gt;
+    document.getElementById("spanid").innerHTML="*Space is not allowed!*";
+    }
+    if(username.length>20)
+    {
+    istrue=false;
+    &lt;!&ndash;alert("User Name is too Long!..PLease Enter Below 7 characters!");&ndash;&gt;
+    document.getElementById("spanid").innerHTML="*Group Name is too Long!..Please Enter Below 20 characters!*";
+    }
+    if(!isNaN(username))
+    {
+     istrue=false;
+    document.getElementById("spanid").innerHTML="*Invalid Characters!.UserName Should be ALPHABETS only! *";
+    }
+    if(isNaN(amt))
+    {
+     istrue=false;
+    document.getElementById("spanid2").innerHTML="*Invalid Characters!.Amount should be a NUMBER only !*";
+    }
+    return istrue;
+    }
+        function pop()
+        {
+        var istrue=true;
+        if(confirm("DO YOU WANT TO CHANGE YOUR GROUP NAME "!!"))
+        {
+        istrue=true;
+        }
+        else
+        {
+        istrue=false;
+        }
+        return istrue;
+        }
+    </script>
+    <style>
+  .container{
+    height: 100%;
+    align-content: center;
+    }
+      .card{
+    margin-top:auto;
+    margin-bottom: auto;
+    width: 50%;
+    }
+
+    .card-header h2{
+    color: black;
+    }
+.errorpg{color:red;
+}
+.input-group-prepend:after {
+  content:"*";
+  color:red;
+}
+    </style>
+</head>
+<body>
+<div th:replace="fragments/navbar::navbar"/>
+<form action="#" th:action="@{/updateUserDetails}" th:object="${users}" name="myform" method=post onsubmit="return valid();">
+    <div class="container">
+        <div class="d-flex justify-content-center ">
+            <div class="card mt-5">
+                <div class="card-header text-center">
+                    <h2>Edit User</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label for="userName" class="input-group-prepend col-sm-4">Name</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="userName" th:field="*{userName}"
+                                   th:value="${users.userName}" name="userName" placeholder="User Name" readonly><span
+                                style="color:black" id="spanid"></span></input><br>
+                            <div th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="errorpg">*Name Error*</div>
+                        </div>
+                    </div>
+                    <div>
+                        <input type="hidden" th:value="${users.userId}" th:field="${users.userId}" id="userId">
+
+                    </div>
+                    <div class="form-group row">
+                        <label for="phnumber" class="input-group-prepend col-sm-4">Moblie Number</label>
+                        <div class="col-sm-8">
+                            <input type="number" th:field="*{mobileNumber}" th:value="${users.mobileNumber}"
+                                   id="phnumber" name="mobileNumber" class="form-control" placeholder="Moblie Number"
+                                   size="10" readonly><span style=" ... " id="spanid3"></span></input>
+                            <div th:if="${#fields.hasErrors('mobileNumber')}" th:errors="*{mobileNumber}" class="errorpg" >*Mobile Number
+                                has error*
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="emailid" class="input-group-prepend col-sm-4" readonly>Email Id</label>
+                        <div class="col-sm-8">
+                            <input type="email" th:field="*{emailId}" th:value="${users.emailId}" id="emailid"
+                                   name="emailId" class="form-control" placeholder="Enter Email Id" readonly><span
+                                style=" ... " id="spanid4"></span></input>
+                            <div  style="color:red" th:text="${msg}"></div>
+                            <div th:if="${#fields.hasErrors('emailId')}" th:errors="*{emailId}" class="errorpg">*EmailId has error*</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="groupname" class="input-group-prepend col-sm-4">Group Name</label>
+                        <div class="col-sm-8">
+                            <select autofocus class="form-control" id="groupname" th:field="*{groupName}"
+                                    th:value="*{groupName}" name="groupName">
+                                <option th:each="group : ${groups}" th:value="${group.groupName}"
+                                        th:text="${group.groupName}"></option>
+                            </select><br>
+                            <div th:text="${msgGrp}" style="color:red"></div>
+                            <div th:if="${#fields.hasErrors('groupName')}" th:errors="*{groupName}" class="errorpg">*groupName has
+                                error*
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <input type="hidden" name="editedBy" id="editby"class="form-control" value="ADMIN" ><span style="color:red" id="spanid5"></span><br>
+                    </div>
+                    <div class="form-group row">
+                        <label class="input-group-prepend col-sm-4">Status</label>
+                        <div class="col-sm-8">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" id="active" type="radio" th:field="*{status}" name="status"  value="active">
+                                <label class="form-check-label" for="active">Active</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" th:field="*{status}"  name="status" id="inactive" value="inactive" checked>
+                                <label class="form-check-label" for="inactive">In-Active</label>
+                            </div>
+                            <div th:if="${#fields.hasErrors('status')}" th:errors="*{status}">status  has error</div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div align = "center" ><a href="/userPage" class="btn btn-info" role="button">Cancel</a>&nbsp
+                            <span> <input type="submit" value="Submit" onclick="return pop();"class="btn btn-outline-success"></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div th:replace="fragments/footer::footer"/>
+</body>
+</html>
+

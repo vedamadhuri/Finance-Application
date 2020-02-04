@@ -1,0 +1,101 @@
+<!DOCTYPE>
+<html xmlns:th="https://thymeleaf.org">
+<head lang="en">
+    <title>Add User</title>
+    <div th:replace="fragments/header::header"/>
+    <script>
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+        history.go(1);
+    };
+
+    </script>
+    <style>
+  .container{
+    height: 100%;
+    align-content: center;
+    }
+    .card{
+    margin-top:auto;
+    margin-bottom: auto;
+    width: 50%;
+    }
+    .card-header h2{
+    color: black;
+    }
+    .input-group-prepend:after {
+  content:"*";
+  color:red;
+}
+    </style>
+</head>
+<body>
+<div th:replace="fragments/navbar::navbar"/>
+<form action="#" th:action="@{/submitUserDetails}" th:object="${users}"  name="myform" method=post onsubmit="return valid();">
+    <div class="container">
+        <div class="d-flex justify-content-center">
+            <div class="card mt-3">
+                <div class="card-header text-center">
+                    <h2>Add User</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label for="userName" class="input-group-prepend col-sm-4">Name</label>
+                        <div class="col-sm-8">
+                            <input type="text"  class="form-control" id="userName" th:field="*{userName}" name="userName"  pattern="[a-zA-Z_ ][a-zA-Z_ ]{2,20}" title="Spaces are not allowed,Please Enter a valid UserName" placeholder="User Name" autocomplete="off" ><span style="color:black"id="spanid"></span></input><br>
+                            <div th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">Name Error</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="phnumber" class="input-group-prepend col-sm-4">Moblie Number</label>
+                        <div class="col-sm-8">
+                            <input type="text" th:field="*{mobileNumber}" name="mobileNumber" id="phnumber" class="form-control" placeholder="Mobile Number"  size="10" pattern="[6|7|8|9][0-9]{9}" title="PLease Enter Valid 10 Digit MobileNumber" required autocomplete="off"></span></input>
+                            <div  style="color:red" th:text="${msg}"></div>
+                        </div>
+                        <div th:if="${#fields.hasErrors('mobileNumber')}" th:errors="*{mobileNumber}">Mobile Number has error</div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="emailid" class="input-group-prepend col-sm-4" readonly>Email Id</label>
+                        <div class="col-sm-8">
+                            <input type="email" th:field="*{emailId}" name="emailId" id="emailid"class="form-control"placeholder="Enter Email Id" title="Spaces are not allowed,Please Enter a Valid Email that consists of @ and ." autocomplete="off"><span style=" ... " id="spanid4"></span></input>
+                            <div  style="color:red" th:text="${msgEmailId}"></div>
+                        </div>
+
+                        <div th:if="${#fields.hasErrors('emailId')}" th:errors="*{emailId}">EmailId  has error</div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="groupname" class="input-group-prepend col-sm-4">Group Name</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" id="groupname" th:field="*{groupName}" name="groupName">
+                                <option th:each="group : ${groups}" th:value="${group.groupName}" th:text="${group.groupName}" th:field="*{groupName}" required></option>
+                            </select>
+                            <div  style="color:red" th:text="${msgGrp}"></div><br>
+                            <div th:if="${#fields.hasErrors('groupName')}" th:errors="*{groupName}">groupName  has error</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="input-group-prepend col-sm-4">Status</label>
+                        <div class="col-sm-8">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" id="active" type="radio" name="status"  value="active" checked>
+                                <label class="form-check-label" for="active">Active</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="status" id="inactive" value="inactive">
+                                <label class="form-check-label" for="inactive">In-Active</label>
+                            </div>
+                            <div th:if="${#fields.hasErrors('status')}" th:errors="*{status}">status  has error</div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div align = "center" ><a href="/userPage" class="btn btn-info" role="button">Cancel</a>&nbsp
+                        <span> <input type="submit" value="Submit" class="btn btn-outline-success"></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div th:replace="fragments/footer::footer"/>
+</body>
+</html>
