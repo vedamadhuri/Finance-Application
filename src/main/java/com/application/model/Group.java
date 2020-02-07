@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "groups_names")
+@Table(name = "groupsNames")
 public class Group implements Serializable {
 
     @Id
