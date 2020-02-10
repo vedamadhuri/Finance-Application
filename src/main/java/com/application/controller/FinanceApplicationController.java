@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@RestController
+@Controller
 public class FinanceApplicationController implements FinanceApplicationConstants {
     private static final Logger logger = LoggerFactory.getLogger(FinanceApplicationController.class);
 
@@ -45,7 +45,7 @@ public class FinanceApplicationController implements FinanceApplicationConstants
      * This method is used to " Check the login details and proceed further "
      */
     @PostMapping(value = "/authenticate-user")
-    public String authenticateUser(@RequestBody AdminDto admindto, Model model) {
+    public String authenticateUser( AdminDto admindto, Model model) {
         logger.info("Entered Into authenticateUser ControllerMethod");
         logger.debug("Entered Into authenticateUser ControllerMethod");
         if ((admindto.getAdministrator() == "") || (admindto.getPassword() == "")) {
