@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "GroupUser")
+@Table(name = "GroupUsers")
 public class GroupUser implements Serializable {
 
 
